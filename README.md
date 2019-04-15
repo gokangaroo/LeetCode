@@ -4,6 +4,6 @@
 
 ### 文件命名规则
 
-题目名字中文`slug` 如 12. 整数转罗马数字即为 `integer-to-roman`
+题目名字中文`slug` 如 12. 整数转罗马数字即为 `integer-to-roman.go`
 
 欢迎提交
