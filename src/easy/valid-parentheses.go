@@ -6,33 +6,29 @@ import (
 )
 
 func main() {
-	str := "()"
+	str := "]"
 	fmt.Println(isValid(str))
 }
 
 func isValid(s string) bool {
-	cs := []byte(s)
 	st := make(datastructure.Stack, 0)
-	for _, c := range cs {
-		switch c {
-		case '(', '{', '[':
+	for _, c := range s {
+		switch string(c) {
+		case "(", "{", "[":
 			st.Push(c)
-		case ']':
-			pope, _ := st.Pop()
-			if []byte("[")[0] == pope {
-			} else {
+		case "]":
+			pope, err := st.Pop()
+			if err != nil || "[" != string(pope.(int32)) {
 				return false
 			}
-		case '}':
-			pope, _ := st.Pop()
-			if []byte("{")[0] == pope {
-			} else {
+		case "}":
+			pope, err := st.Pop()
+			if err != nil || "{" != string(pope.(int32)) {
 				return false
 			}
-		case ')':
-			pope, _ := st.Pop()
-			if []byte("(")[0] == pope {
-			} else {
+		case ")":
+			pope, err := st.Pop()
+			if err != nil || "(" != string(pope.(int32)) {
 				return false
 			}
 		}
