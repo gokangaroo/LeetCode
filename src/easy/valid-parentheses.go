@@ -1,7 +1,8 @@
 package main
 
 import (
-	"datastructure"
+	// 导入包到当前包, 类似java static import
+	. "datastructure"
 	"fmt"
 )
 
@@ -11,7 +12,7 @@ func main() {
 }
 
 func isValid(s string) bool {
-	st := make(datastructure.Stack, 0)
+	st := make(Stack, 0)
 	for _, c := range s {
 		switch string(c) {
 		case "(", "{", "[":
