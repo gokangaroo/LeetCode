@@ -6,13 +6,14 @@ import (
 )
 
 func main() {
-	//arr := []int{-1, 0, 1, 2, -1, 4}
-	arr := []int{-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6}
+	arr := []int{-1, 0, 1, 2, -1, 4}
+	//arr := []int{-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6}
 	//arr := []int{0, 0, 0, 0}
 	sort.Ints(arr)
 	res := threeSum(arr)
 	fmt.Println(res)
 }
+
 /**
 huija
 干, 这道题好多重复的数, 无语
@@ -21,13 +22,18 @@ huija
 //	sort.Ints(nums)
 //	res := make([][]int, 0)
 //	mymap := make(map[int]int)
+//	arrmap := make(map[int]int)
 //	for i := 0; i < len(nums); i++ {
 //		for j := i + 1; j < len(nums); j++ {
 //			_, ok := mymap[0-nums[i]-nums[j]]
 //			if ok {
 //				arr := make([]int, 0)
 //				arr = append(arr, 0-nums[i]-nums[j], nums[i], nums[j])
-//				last = arr
+//				v, ok := arrmap[arr[0]]
+//				if !ok || v != arr[1] {
+//					res = append(res, arr)
+//					arrmap[arr[0]] = arr[1]
+//				}
 //			}
 //		}
 //		mymap[nums[i]] = i
