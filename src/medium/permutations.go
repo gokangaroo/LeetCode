@@ -5,7 +5,7 @@ import "fmt"
 func main()  {
 	arr := []int{1,2,3}
 	res := permute(arr)
-	fmt.Println("%v",res)
+	fmt.Println(res)
 }
 
 func permute(nums []int) [][]int{
