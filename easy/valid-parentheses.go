@@ -2,7 +2,8 @@ package main
 
 import (
 	// 导入包到当前包, 类似java static import
-	. "datastructure"
+	. "github/gokangaroo/LeetCode/datastructure"
+
 	"fmt"
 )
 

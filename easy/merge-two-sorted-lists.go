@@ -1,7 +1,8 @@
 package main
 
 import (
-	. "datastructure"
+	. "github/gokangaroo/LeetCode/datastructure"
+
 	"fmt"
 )
 
