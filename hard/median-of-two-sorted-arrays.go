@@ -28,11 +28,11 @@ func findMedianSortedArrays(A []int, B []int) float64 {
 	iMin, iMax, halfLen := 0, m, (m+n+1)/2
 	for iMin <= iMax {
 		i := (iMin + iMax) / 2
-		j := halfLen - i
+		j := halfLen - i //保证i+j一直为中位数
 		if i < iMax && B[j-1] > A[i] {
-			iMin = i + 1 // i太小, A[i]不够大
+			iMin = i + 1 // i太小, A[i]不够大, i要加, 表面i+1,实际是二分
 		} else if i > iMin && A[i-1] > B[j] {
-			iMax = i - 1 // j太大, B[j]不够小
+			iMax = i - 1 // j太大, B[j]不够小, j要减, 表面i-1
 		} else { // 找到了临界点, 进行情况分析.
 			maxLeft := 0
 			if i == 0 { // 说明A全在右边, 中位树在B
