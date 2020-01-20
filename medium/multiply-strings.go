@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	var num1, num2 = "123456789", "987654321"
+	var num1, num2 = "123456789364732432648632482374217472", "9876543214t2384238747234792749274927374"
 	res := multiply(num1, num2)
 	fmt.Println(res)
 }
