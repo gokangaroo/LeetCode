@@ -18,7 +18,7 @@ func (stack *Stack) Pop() (interface{}, error) {
 	return value, nil
 }
 
-func (stack Stack) Peek() (interface{}, error) {
+func (stack Stack) Top() (interface{}, error) {
 	if len(stack) == 0 {
 		return nil, errors.New("Out of index, len is 0")
 	}
