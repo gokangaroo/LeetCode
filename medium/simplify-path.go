@@ -15,7 +15,7 @@ func main() {
 //非常典型的出入栈
 func simplifyPath(path string) string {
 	var stack = make(datastructure.Stack, 0)
-	res := ""
+	var res strings.Builder
 	//开始入栈
 	pathArr := strings.Split(path, "/")
 	for i := 0; i < len(pathArr); i++ {
@@ -33,10 +33,10 @@ func simplifyPath(path string) string {
 		stack.Push(pathArr[i])
 	}
 	for _, v := range stack {
-		res += fmt.Sprintf("/%s", v.(string))
+		res.WriteString(fmt.Sprintf("/%s", v.(string)))
 	}
 	if stack.Len() == 0 {
 		return "/"
 	}
-	return res
+	return res.String()
 }
