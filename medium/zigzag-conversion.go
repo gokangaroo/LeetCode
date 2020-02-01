@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	var s = "PAYPALISHIRING"
@@ -11,12 +14,11 @@ func convert(s string, numRows int) string {
 	if len(s) < 2 || numRows == 1 || len(s) <= numRows {
 		return s
 	}
-	var s2 = ""
-	res := make([]string, numRows)
+	res := make([]strings.Builder, numRows)
 	var x = 0
 	var up = false //也就是down
 	for i := 0; i < len(s); i++ {
-		res[x] += string(s[i])
+		res[x].WriteByte(s[i])
 		if x < numRows-1 && !up {
 			x++
 			continue
@@ -36,8 +38,9 @@ func convert(s string, numRows int) string {
 			continue
 		}
 	}
+	var s2 strings.Builder
 	for i := 0; i < numRows; i++ {
-		s2 += res[i]
+		s2.WriteString(res[i].String())
 	}
-	return s2
+	return s2.String()
 }
