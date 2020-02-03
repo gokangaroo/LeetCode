@@ -3,15 +3,14 @@ package main
 import "fmt"
 
 func main() {
-	// golang 这个byte 1和0有点二, 这道题有点二
 	var grid = [][]byte{
-		{49, 49, 49, 49, 49, 49, 49},
-		{48, 48, 48, 48, 48, 48, 49},
-		{49, 49, 49, 49, 49, 48, 49},
-		{49, 48, 48, 48, 49, 48, 49},
-		{49, 48, 49, 48, 49, 48, 49},
-		{49, 48, 49, 49, 49, 48, 49},
-		{49, 49, 49, 49, 49, 49, 49},
+		{'1', '1', '1', '1', '1', '1', '1'},
+		{'0', '0', '0', '0', '0', '0', '1'},
+		{'1', '1', '1', '1', '1', '0', '1'},
+		{'1', '0', '0', '0', '1', '0', '1'},
+		{'1', '0', '1', '0', '1', '0', '1'},
+		{'1', '0', '1', '1', '1', '0', '1'},
+		{'1', '1', '1', '1', '1', '1', '1'},
 	}
 	fmt.Println(numIslands(grid))
 }
@@ -35,40 +34,42 @@ func numIslands(grid [][]byte) int {
 		return 0
 	}
 	head := 0
+	// 从head来看, 似乎开始是深度遍历, 往这个head下面找
+	// 但是从后面node来看, 又是广度遍历, 每个只找最近的一个.
 	nodes := make(chan node2, height*width)
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			if grid[y][x] == 49 { //没有被遍历过的可以做head
+			if grid[y][x] == '1' { //没有被遍历过的可以做head
 				head++
-				grid[y][x] = 1
+				grid[y][x] = '0'
 				nodes <- node2{y, x}
 				//fmt.Printf("head:%d %d\n", y, x)
 				for len(nodes) != 0 {
 					tmp := <-nodes
 					if tmp.y < height-1 {
-						if grid[tmp.y+1][tmp.x] == 49 {
-							grid[tmp.y+1][tmp.x] = 1
+						if grid[tmp.y+1][tmp.x] == '1' {
+							grid[tmp.y+1][tmp.x] = '0'
 							nodes <- node2{tmp.y + 1, tmp.x}
 							//fmt.Printf("body:%d %d\n", tmp.y+1, tmp.x)
 						}
 					}
 					if tmp.x < width-1 {
-						if grid[tmp.y][tmp.x+1] == 49 {
-							grid[tmp.y][tmp.x+1] = 1
+						if grid[tmp.y][tmp.x+1] == '1' {
+							grid[tmp.y][tmp.x+1] = '0'
 							nodes <- node2{tmp.y, tmp.x + 1}
 							//fmt.Printf("body:%d %d\n", tmp.y, tmp.x+1)
 						}
 					}
 					if tmp.x > 0 { // 额外需要向左遍历,向上遍历
-						if grid[tmp.y][tmp.x-1] == 49 {
-							grid[tmp.y][tmp.x-1] = 1
+						if grid[tmp.y][tmp.x-1] == '1' {
+							grid[tmp.y][tmp.x-1] = '0'
 							nodes <- node2{tmp.y, tmp.x - 1}
 							//fmt.Printf("body:%d %d\n", tmp.y, tmp.x-1)
 						}
 					}
 					if tmp.y > 0 {
-						if grid[tmp.y-1][tmp.x] == 49 {
-							grid[tmp.y-1][tmp.x] = 1
+						if grid[tmp.y-1][tmp.x] == '1' {
+							grid[tmp.y-1][tmp.x] = '0'
 							nodes <- node2{tmp.y - 1, tmp.x}
 							//fmt.Printf("body:%d %d\n", tmp.y-1, tmp.x)
 						}
