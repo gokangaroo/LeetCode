@@ -30,6 +30,7 @@ type BNode struct {
 	y int
 }
 
+//BFS 边界出发  排除标记点
 func solve(board [][]byte) {
 	nr := len(board)
 	if nr == 0 {
