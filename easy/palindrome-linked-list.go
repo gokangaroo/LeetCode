@@ -2,32 +2,32 @@ package main
 
 import (
 	"fmt"
-	"github/gokangaroo/LeetCode/datastructure"
+	. "github/gokangaroo/LeetCode/datastructure"
 )
 
 func main() {
 	//-16557,-8725,-29125,28873,-21702,15483,-28441,-17845,-4317,-10914
-	node1 := datastructure.ListNode{-16557, nil}
-	node2 := datastructure.ListNode{-8725, nil}
-	node3 := datastructure.ListNode{-29125, nil}
-	node4 := datastructure.ListNode{28873, nil}
-	node5 := datastructure.ListNode{-21702, nil}
-	node6 := datastructure.ListNode{15483, nil}
-	node7 := datastructure.ListNode{-28441, nil}
-	node8 := datastructure.ListNode{-17845, nil}
-	node9 := datastructure.ListNode{-4317, nil}
-	node10 := datastructure.ListNode{-10914, nil}
+	node1 := ListNode{-16557, nil}
+	node2 := ListNode{-8725, nil}
+	node3 := ListNode{-29125, nil}
+	node4 := ListNode{28873, nil}
+	node5 := ListNode{-21702, nil}
+	node6 := ListNode{15483, nil}
+	node7 := ListNode{-28441, nil}
+	node8 := ListNode{-17845, nil}
+	node9 := ListNode{-4317, nil}
+	node10 := ListNode{-10914, nil}
 
-	node20 := datastructure.ListNode{-16557, nil}
-	node19 := datastructure.ListNode{-8725, nil}
-	node18 := datastructure.ListNode{-29125, nil}
-	node17 := datastructure.ListNode{28873, nil}
-	node16 := datastructure.ListNode{-21702, nil}
-	node15 := datastructure.ListNode{15483, nil}
-	node14 := datastructure.ListNode{-28441, nil}
-	node13 := datastructure.ListNode{-17845, nil}
-	node12 := datastructure.ListNode{-4317, nil}
-	node11 := datastructure.ListNode{-10914, nil}
+	node20 := ListNode{-16557, nil}
+	node19 := ListNode{-8725, nil}
+	node18 := ListNode{-29125, nil}
+	node17 := ListNode{28873, nil}
+	node16 := ListNode{-21702, nil}
+	node15 := ListNode{15483, nil}
+	node14 := ListNode{-28441, nil}
+	node13 := ListNode{-17845, nil}
+	node12 := ListNode{-4317, nil}
+	node11 := ListNode{-10914, nil}
 	node1.Next = &node2
 	node2.Next = &node3
 	node3.Next = &node4
@@ -51,7 +51,7 @@ func main() {
 }
 
 // 这是翻转后半部分, 需要多费一半时间, 也可以直接翻转前半部分.
-func isPalindrome_list(head *datastructure.ListNode) bool {
+func isPalindrome_list(head *ListNode) bool {
 	if head == nil || head.Next == nil {
 		return true
 	}
@@ -67,8 +67,8 @@ func isPalindrome_list(head *datastructure.ListNode) bool {
 	}
 	// 无论是单双, 现在node1都在前半部分的最后一个node
 	cur := node1.Next //cur扫到就插到node1后面,来翻转后半部分
-	var nextNode *datastructure.ListNode
-	var leftHead *datastructure.ListNode = nil //后半部分另起炉灶
+	var nextNode *ListNode
+	var leftHead *ListNode = nil //后半部分另起炉灶
 	for cur != nil {
 		// 1.保存cur的下一个节点,最主要的一步
 		nextNode = cur.Next
@@ -90,7 +90,7 @@ func isPalindrome_list(head *datastructure.ListNode) bool {
 	return true
 }
 
-func isPalindrome_list2(head *datastructure.ListNode) bool {
+func isPalindrome_list2(head *ListNode) bool {
 	if head == nil || head.Next == nil {
 		return true
 	}
@@ -98,8 +98,8 @@ func isPalindrome_list2(head *datastructure.ListNode) bool {
 	// 可以用快慢指针, 当快指针走到结尾说明走到一半了
 	node1 := head
 	node2 := head.Next
-	var nextNode *datastructure.ListNode
-	var leftHead *datastructure.ListNode = nil //后半部分另起炉灶
+	var nextNode *ListNode
+	var leftHead *ListNode = nil //后半部分另起炉灶
 	for node2.Next != nil {
 		nextNode = node1.Next
 		node1.Next = leftHead
