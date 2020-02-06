@@ -5,11 +5,40 @@ import (
 )
 
 func main() {
-	demo := []string{"aa", "a"}
+	demo := []string{"cc", "c"}
 	fmt.Println(longestCommonPrefix(demo))
 }
 
-func longestCommonPrefix(strs []string) string {
+func longestCommonPrefix(strs []string) (res string) {
+	if len(strs) == 0 {
+		return ""
+	}
+	if len(strs) == 1 {
+		return strs[0]
+	}
+	// 预先设置好返回值res,recover后直接触发return
+	defer r()
+
+	max := 1
+	for max < len(strs[0])+1 {
+		for i := 0; i < len(strs); i++ {
+			if strs[i][:max] != strs[0][:max] { //这里会panic
+				return
+			}
+		}
+		max++
+		res = strs[0][:max-1]
+	}
+	return
+}
+
+func r() {
+	if p := recover(); p != nil {
+		return
+	}
+}
+
+func longestCommonPrefix2(strs []string) string {
 	result := ""
 	length := len(strs)
 	if length == 0 {
