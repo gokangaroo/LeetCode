@@ -5,7 +5,7 @@ import "fmt"
 func main() {
 	nums := []int{1, 1, 2, 3}
 	len := removeDuplicates(nums)
-	for i := 1; i < len; i++ {
+	for i := 0; i < len; i++ {
 		fmt.Println(nums[i])
 	}
 }
