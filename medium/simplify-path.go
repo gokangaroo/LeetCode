@@ -40,3 +40,38 @@ func simplifyPath(path string) string {
 	}
 	return res.String()
 }
+
+type dir struct {
+	absolutePath string
+	parentDir    *dir
+	sons         map[string]*dir
+}
+
+func simplifyPath2(path string) string {
+	p := strings.Split(path, "/")
+	start := &dir{"/", nil, make(map[string]*dir)}
+	cursor := start
+	for _, v := range p {
+		switch v {
+		case ".", "":
+			break
+		case "..":
+			if cursor.parentDir != nil {
+				cursor = cursor.parentDir
+			}
+		default:
+			// 是否是新节点
+			if d, ok := cursor.sons[v]; ok {
+				cursor = d
+			} else {
+				if cursor.absolutePath != "/" {
+					cursor.sons[v] = &dir{cursor.absolutePath + "/" + v, cursor, make(map[string]*dir)}
+				} else {
+					cursor.sons[v] = &dir{cursor.absolutePath + v, cursor, make(map[string]*dir)}
+				}
+				cursor = cursor.sons[v]
+			}
+		}
+	}
+	return cursor.absolutePath
+}
