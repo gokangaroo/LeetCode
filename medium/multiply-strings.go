@@ -11,7 +11,7 @@ func main() {
 	fmt.Println(res)
 }
 
-func multiply(num1 string, num2 string) string {
+func multiply2(num1 string, num2 string) string {
 	if num1 == "0" || num2 == "0" {
 		return "0"
 	}
@@ -94,4 +94,34 @@ func addTwoString(baseStr []string, str []string, index int) []string {
 
 	}
 	return res
+}
+
+func multiply(num1 string, num2 string) string {
+	if "0" == num1 || "0" == num2 {
+		return "0"
+	}
+	l := len(num1) + len(num2)
+	// arr是结果, 预先开辟
+	res := make([]byte, l)
+	for i := 0; i < len(num1); i++ {
+		n1 := num1[len(num1)-1-i] - '0' // TODO 巧妙减去'0'来通过byte实现真实数字的乘法和加法
+		idx := l - 1 - i                //从arr最末尾开始
+		var carry byte
+		for j := 0; j < len(num2); j++ {
+			n2 := num2[len(num2)-1-j] - '0' // TODO
+			n := res[idx] + n1*n2 + carry   //记得加上进位
+			res[idx] = n % 10               //tmp是结果
+			carry = n / 10                  //这是进数,放到上一位:idx--
+			idx--
+		}
+		res[idx] += carry //最后一轮计算结束后, 需要记得把carry加上
+	}
+	var result string
+	for i := 0; i < l; i++ {
+		if res[i] == 0 && len(result) == 0 { //略过开头
+			continue
+		}
+		result += string('0' + res[i]) //TODO 最后要加上'0'来进行字符串拼接
+	}
+	return result
 }
