@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"container/heap"
+	"fmt"
+)
 
 func main() {
 	n := 10
@@ -39,7 +42,7 @@ func nthUglyNumber1(n int) int {
 }
 
 //三指针坐标法(2,3,5坐标点)
-func nthUglyNumber(n int) int {
+func nthUglyNumber2(n int) int {
 	nums := []int{1}
 	i2, i3, i5 := 0, 0, 0
 	for i := 1; i < n; i++ {
@@ -53,7 +56,7 @@ func nthUglyNumber(n int) int {
 		if min == nums[i5]*5 {
 			i5++
 		}
-		nums = append(nums,min)
+		nums = append(nums, min)
 	}
 	return nums[n-1]
 }
@@ -63,4 +66,43 @@ func getMin(x, y int) int {
 		return x
 	}
 	return y
+}
+
+type IntHead []int
+
+//最小堆 每次建堆就最小数
+func nthUglyNumber(n int) int {
+	h := &IntHead{1}
+	heap.Init(h)
+	num := 0
+	for i := 0; i < n; i++ {
+		num = heap.Pop(h).(int)
+		//去除重复(3x2 2x3)
+		for h.Len() > 0 && num == (*h)[0] {
+			num = heap.Pop(h).(int)
+		}
+		heap.Push(h, 2*num)
+		heap.Push(h, 3*num)
+		heap.Push(h, 5*num)
+	}
+	return num
+}
+
+func (h IntHead) Len() int {
+	return len(h)
+}
+func (h IntHead) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
+}
+func (h IntHead) Less(i, j int) bool {
+	return h[i] < h[j]
+}
+func (h *IntHead) Push(x interface{}) {
+	*h = append(*h, x.(int))
+}
+func (h *IntHead) Pop() interface{} {
+	length := len(*h)
+	x := (*h)[length-1]
+	*h = (*h)[:length-1]
+	return x
 }
