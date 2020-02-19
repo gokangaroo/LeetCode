@@ -29,24 +29,24 @@ func HSConstructor() MyHashSet {
 }
 
 func (this *MyHashSet) Add(key int) {
-	if this.slot[key/slot_num] == nil {
-		this.slot[key/slot_num] = list.New()
+	if this.slot[key%slot_num] == nil {
+		this.slot[key%slot_num] = list.New()
 	}
-	for xx := this.slot[key/slot_num].Front(); xx != nil; xx = xx.Next() {
+	for xx := this.slot[key%slot_num].Front(); xx != nil; xx = xx.Next() {
 		if xx.Value == key {
 			return
 		}
 	}
-	this.slot[key/slot_num].PushBack(key)
+	this.slot[key%slot_num].PushBack(key)
 }
 
 func (this *MyHashSet) Remove(key int) {
-	if this.slot[key/slot_num] == nil {
+	if this.slot[key%slot_num] == nil {
 		return
 	}
-	for xx := this.slot[key/slot_num].Front(); xx != nil; xx = xx.Next() {
+	for xx := this.slot[key%slot_num].Front(); xx != nil; xx = xx.Next() {
 		if xx.Value == key {
-			this.slot[key/slot_num].Remove(xx)
+			this.slot[key%slot_num].Remove(xx)
 			return
 		}
 	}
@@ -54,10 +54,10 @@ func (this *MyHashSet) Remove(key int) {
 
 /** Returns true if this set contains the specified element */
 func (this *MyHashSet) Contains(key int) bool {
-	if this.slot[key/slot_num] == nil {
+	if this.slot[key%slot_num] == nil {
 		return false
 	}
-	for xx := this.slot[key/slot_num].Front(); xx != nil; xx = xx.Next() {
+	for xx := this.slot[key%slot_num].Front(); xx != nil; xx = xx.Next() {
 		if xx.Value == key {
 			return true
 		}

@@ -35,26 +35,26 @@ func HMConstructor() MyHashMap {
 
 /** value will always be non-negative. */
 func (this *MyHashMap) Put(key int, value int) {
-	if this.slot[key/slot_num] == nil {
-		this.slot[key/slot_num] = list.New()
-		this.slot[key/slot_num].PushBack(KV{key, value})
+	if this.slot[key%slot_num] == nil {
+		this.slot[key%slot_num] = list.New()
+		this.slot[key%slot_num].PushBack(KV{key, value})
 		return
 	}
-	for xx := this.slot[key/slot_num].Front(); xx != nil; xx = xx.Next() {
+	for xx := this.slot[key%slot_num].Front(); xx != nil; xx = xx.Next() {
 		if xx.Value.(KV).k == key {
 			xx.Value = KV{key, value}
 			return
 		}
 	}
-	this.slot[key/slot_num].PushBack(KV{key, value})
+	this.slot[key%slot_num].PushBack(KV{key, value})
 }
 
 /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
 func (this *MyHashMap) Get(key int) int {
-	if this.slot[key/slot_num] == nil {
+	if this.slot[key%slot_num] == nil {
 		return -1
 	}
-	for xx := this.slot[key/slot_num].Front(); xx != nil; xx = xx.Next() {
+	for xx := this.slot[key%slot_num].Front(); xx != nil; xx = xx.Next() {
 		if xx.Value.(KV).k == key {
 			return xx.Value.(KV).v
 		}
@@ -64,12 +64,12 @@ func (this *MyHashMap) Get(key int) int {
 
 /** Removes the mapping of the specified value key if this map contains a mapping for the key */
 func (this *MyHashMap) Remove(key int) {
-	if this.slot[key/slot_num] == nil {
+	if this.slot[key%slot_num] == nil {
 		return
 	}
-	for xx := this.slot[key/slot_num].Front(); xx != nil; xx = xx.Next() {
+	for xx := this.slot[key%slot_num].Front(); xx != nil; xx = xx.Next() {
 		if xx.Value.(KV).k == key {
-			this.slot[key/slot_num].Remove(xx)
+			this.slot[key%slot_num].Remove(xx)
 			return
 		}
 	}
