@@ -8,7 +8,7 @@ func main() {
 }
 
 //经典最长子序列  二分插入
-func lengthOfLIS(nums []int) int {
+func lengthOfLIS1(nums []int) int {
 	length := len(nums)
 	tails := make([]int, length)
 	res := 0
@@ -34,4 +34,33 @@ func lengthOfLIS(nums []int) int {
 		}
 	}
 	return res
+}
+
+//动态规划
+func lengthOfLIS(nums []int) int {
+	length := len(nums)
+	if length == 0 {
+		return 0
+	}
+	dp := make([]int, length)
+	dp[0] = 1
+	maxVal := 1
+	for i := 1; i < length; i++ {
+		tmp := 0
+		for j := 0; j < i; j++ {
+			if nums[i] > nums[j] {
+				tmp = max(tmp, dp[j])
+			}
+		}
+		dp[i] = tmp + 1
+		maxVal = max(dp[i], maxVal)
+	}
+	return maxVal
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
 }
