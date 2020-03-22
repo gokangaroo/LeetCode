@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 func main() {
-	s1 := "a-"
-	s2 := "b0-1-a"
+	s1 := "ab"
+	s2 := "eidboaoo"
 	fmt.Println(checkInclusion(s1, s2))
 }
 
-func checkInclusion(s1 string, s2 string) bool {
+func checkInclusion0(s1 string, s2 string) bool {
 	count := make([]int, 256) //256个字符编码: 0-255, ascii码
 	for _, v := range s1 {
 		count[v]++
@@ -49,27 +48,42 @@ func checkInclusion(s1 string, s2 string) bool {
 	return false
 }
 
-// 完美超时, 应对短的字符串还可以.
-func checkInclusion0(s1 string, s2 string) bool {
-	m := len(s1)
-	n := len(s2)
-	if m > n {
-		return false
+// 计数法
+func checkInclusion(s1 string, s2 string) bool {
+	l := len(s1)             //[0:l]
+	count := make([]int, 26) // 如果是多字符就255
+	for _, v := range s1 {
+		count[int(v-'a')]++
 	}
-	// 排序法, 找s1的所有集合显然不合理
-	// 那就不断截取s2与s1相同长度出来, 然后转为排序,最终比较'
-	xx := []byte(s1)
-	sort.Slice(xx, func(i, j int) bool {
-		return xx[i] > xx[j]
-	})
-	for i := 0; i+m < n+1; i++ { //i+m可以到n, 而不是n-1
-		hh := []byte(s2[i : i+m])
-		sort.Slice(hh, func(i, j int) bool {
-			return hh[i] > hh[j]
-		})
-		if string(hh) == string(xx) {
-			return true
+	left, right := 0, l
+	for left < right && right < len(s2)+1 {
+		if count[s2[left]-'a'] > 0 {
+			count[s2[left]-'a']--
+			left++
+			continue
 		}
+		if right-l == left { //1.双指针平移动
+			left++
+			right++
+			continue
+		}
+		// 2.开始推进
+		cursor := right - l
+		for s2[cursor] != s2[left] {
+			count[s2[cursor]-'a']++
+			cursor++
+			right++
+		}
+		if cursor == left { //双指针平移动
+			left++
+			right++
+		} else { //算是成功一个
+			left++
+			right++ //这里并不是随着left++,而是舍弃了cursor,虽然代码一样, 但是含义完全不同
+		}
+	}
+	if left == right-1 { //鹊桥相会,说明是有这个序列.
+		return true
 	}
 	return false
 }

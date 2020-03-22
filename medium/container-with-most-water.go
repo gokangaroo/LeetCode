@@ -38,3 +38,29 @@ func minNum(x, y int) int {
 	}
 	return x
 }
+
+func maxArea2(height []int) int {
+	// 1.min(左,右)*(right-left)
+	left, right := 0, len(height)-1
+	max := min(height[left], height[right]) * (right - left)
+	for left < right {
+		// 2.贪心算法,缩短一格, 那高度去掉短的那个
+		if height[left] > height[right] {
+			right--
+		} else {
+			left++
+		}
+		tmp := min(height[left], height[right]) * (right - left)
+		if tmp > max {
+			max = tmp
+		}
+	}
+	return max
+}
+
+func min(left, right int) int {
+	if left > right {
+		return right
+	}
+	return left
+}

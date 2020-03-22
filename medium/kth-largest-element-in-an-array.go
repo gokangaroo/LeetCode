@@ -61,18 +61,12 @@ func headily(nums []int, currentIndex int) {
 func findKthLargest2(nums []int, k int) int {
 	n := IntHeap(nums[0:k])
 	heap.Init(&n)
-	var min = 0
+	var min = heap.Pop(&n).(int)
 	for index := k; index < len(nums); index++ {
-		if min == 0 {
-			min = heap.Pop(&n).(int)
-		}
 		if min < nums[index] { // 比堆顶大再推入(最大的那k个数形成的小顶堆),否则不推
 			heap.Push(&n, nums[index])
-			min = 0
+			min = heap.Pop(&n).(int)
 		}
-	}
-	if min == 0 {
-		return heap.Pop(&n).(int)
 	}
 	return min
 }

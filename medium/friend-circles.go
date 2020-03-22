@@ -38,7 +38,7 @@ func findCircleNum(M [][]int) int {
 	}
 
 	for i := 0; i < len(M); i++ {
-		if M[i][i] != -1 {
+		if M[i][i] != -1 { //自己不在别人的朋友圈
 			dfs(M, i)
 			count++
 		}
