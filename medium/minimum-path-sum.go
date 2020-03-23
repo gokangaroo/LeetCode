@@ -10,7 +10,7 @@ func main() {
 	fmt.Println(minPathSum(grid))
 }
 
-func minPathSum(grid [][]int) int {
+func minPathSum1(grid [][]int) int {
 	nr := len(grid)
 	nc := len(grid[0])
 	for i := 0; i < nr; i++ {
@@ -85,4 +85,40 @@ func dfsMinimumPathSum(grid, path [][]int, i, j int) {
 	if j+1 < nc {
 		dfsMinimumPathSum(grid, path, i, j+1)
 	}
+}
+
+func minPathSum(grid [][]int) int {
+	if len(grid) == 0 {
+		return 0
+	}
+	if len(grid[0]) == 0 {
+		return 0
+	}
+	res := make([][]int, len(grid))
+	for i := 0; i < len(grid[0]); i++ {
+		for j := 0; j < len(grid); j++ { //res[j][i]
+			if i == 0 {
+				res[j] = make([]int, len(grid[0]))
+				if j == 0 {
+					res[j][0] = grid[j][0]
+				} else {
+					res[j][0] = grid[j-1][0] + grid[j][0]
+				}
+				continue
+			}
+			if j == 0 {
+				res[j][i] = grid[j][i-1] + grid[j][i]
+			} else {
+				res[j][i] = min(res[j][i-1], res[j-1][i]) + grid[j][i]
+			}
+		}
+	}
+	return res[len(grid)-1][len(grid[0])-1]
+}
+
+func min(x, y int) int {
+	if x > y {
+		return y
+	}
+	return x
 }

@@ -62,3 +62,23 @@ func groupAnagrams_o(strs []string) [][]string {
 	}
 	return res
 }
+
+func groupAnagrams(strs []string) [][]string {
+	kv := make(map[[26]int][]string, 0)
+	res := make([][]string, 0)
+	for _, v := range strs {
+		tmp := [26]int{}
+		for _, x := range v {
+			tmp[x-'a']++
+		}
+		if vv, ok := kv[tmp]; ok {
+			kv[tmp] = append(vv, v)
+		} else {
+			kv[tmp] = []string{v}
+		}
+	}
+	for _, v := range kv {
+		res = append(res, v)
+	}
+	return res
+}

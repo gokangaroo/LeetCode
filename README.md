@@ -67,12 +67,91 @@
     
     首先, 就是遍历, 排除1, 然后第一个数字的所有字母放到一个[]string里面, 然后与后面字母的[]string组合放到新的数组, 以此类推.
     
+    > 这是一个全排列问题, 可以使用递归.
+    
+- 18.M 4Sum: 四数之和    
+
+    1. 是三数之和的一个升级版本, 外层套一个遍历, 里面还是一个首部指针和双指针
+    2. 也可以直接暴力法.(慢一个数量级)
+    
 - 22.M: generate-parentheses: 括号生成
 
     给一个n, 给出n对括号组合的所有情况,括号顺序一定要对.
     
     这一道题有很多方法, 深度遍历, 广度遍历, 还可以使用动态规划.
+    > 深度遍历为例: dfs(str string,left ,right,n int, res *[]string), 最终结果在叶子节点, append str
+    而广度优先,设置好结构体, 注意队列长度, int(math.Pow(2, float64(2*n-2))), 就是倒数第二层数目(右边切掉了,减半)
+
+``` go
+type node struct {
+	res   string
+	left  int
+	right int
+}
+```
+
+- 29.M: Divide Two Integers: 两数相除
+
+
+- 33,M: Search in Rotated Sorted Array: 搜索旋转数组
+
+    可以利用一边升序和一边降低序的特性, left<=right普通的二分, 如果nums[mid]>nums[left], 那么left就是升序.<br/>
+    需要注意的是, 一定要不错比较y轴的值, 这样会有四种情况
+``` go
+		if nums[mid] > nums[i] { //左边升序
+			if nums[mid] > target && target >= nums[i] { //&&后面就是y轴数值差距的条件判断
+				j = mid - 1
+			} else {
+				i = mid + 1
+			}
+		} else { //右边升序  nums[mid]<=nums[j]<=nums[i]
+			if nums[mid] < target && target <= nums[j] {
+				i = mid + 1
+			} else {
+				j = mid - 1
+			}
+		}
+``` 
+
+- 43.M Multiply Strings: 字符串相乘
     
+    可以make([]byte,l1+l2), 然后利用num1[i]-'0'直接作为数字相乘放入数组<br/>
+    最后用一个strings.Builder, 然后WriteByte(res[i]+'0')<br/>
+    最后的最后, strings.TrimLeft(s,"0")
+
+- 46.M: Permutations: 全排列
+
+    这道题不好想, 主要思路是递归.
+    
+    每次递归自己, nums[i]每次都会减少一个数字, 作为前缀, 剩余部分进行递归<br/>
+    当len=1时, 递归到基准线, 递归结束.   
+    
+``` go
+// 基准条件
+	res := make([][]int, 0)
+	if len(nums) == 1 {
+		res = append(res, nums)
+		return res
+	}
+
+// 递归条件
+		sub = append(sub[:i], sub[i+1:]...)
+		// 递归,拼接出最终二维数组, range拼接
+		for _, sr := range permute(sub) {
+			rr := []int{v}
+			rr = append(rr, sr...)
+			res = append(res, rr)
+		}
+```
+
+- 49.M Group Anagrams: 字母异位词分组(就是相同字符串的放一组)
+    
+    利用[26]int{}这种数组来给字符串计数, map[[26]int][]string来存储[]string, 最后append为一个二维数组即可
+
+- 64.M: Minimum Path Sum: 最小路径和
+
+    动态规划, 另存一个二维数组即可, 每一次取min(head,left)+now
+ 
 - 71.M: simplify-path: 简化路径
 
     以 Unix 风格给出一个文件的绝对路径，你需要简化它。或者换句话说，将其转换为规范路径

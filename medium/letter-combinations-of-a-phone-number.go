@@ -19,7 +19,7 @@ func main() {
 	fmt.Println(arr)
 }
 
-func letterCombinations(digits string) []string {
+func letterCombinations2(digits string) []string {
 	res := make([]string, 0)
 	for i := 0; i < len(digits); i++ {
 		if digits[i] == '1' {
@@ -38,6 +38,26 @@ func letterCombinations(digits string) []string {
 			}
 		}
 		res = tmpRes
+	}
+	return res
+}
+
+// 全排列问题, 递归
+func letterCombinations(digits string) []string {
+	res := make([]string, 0)
+	if len(digits) == 0 {
+		return res
+	}
+	if len(digits) == 1 { // base case
+		return append(res, digitMap[digits[0]]...)
+	}
+
+	head := digitMap[digits[0]]
+	tail := letterCombinations(digits[1:]) // recursive case
+	for _, s1 := range head {
+		for _, s2 := range tail {
+			res = append(res, s1+s2)
+		}
 	}
 	return res
 }
