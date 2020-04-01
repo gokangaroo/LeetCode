@@ -63,7 +63,7 @@ func groupAnagrams_o(strs []string) [][]string {
 	return res
 }
 
-func groupAnagrams(strs []string) [][]string {
+func groupAnagrams1(strs []string) [][]string {
 	kv := make(map[[26]int][]string, 0)
 	res := make([][]string, 0)
 	for _, v := range strs {
