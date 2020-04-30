@@ -42,6 +42,7 @@ func deleteNode(root *TreeNode, key int) *TreeNode {
 			}
 			return cur
 		}
+		// 2.2 只有一个子节点, 直接替代之
 		if root.Left == nil {
 			return root.Right
 		}
