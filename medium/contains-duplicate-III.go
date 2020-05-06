@@ -5,9 +5,9 @@ import (
 )
 
 func main() {
-	nums := []int{1, 2, 3, 1}
-	k := 3
-	t := 0
+	nums := []int{4, 1, 6, 3}
+	k := 100
+	t := 1
 	fmt.Println(containsNearbyAlmostDuplicate(nums, k, t))
 }
 
@@ -47,7 +47,7 @@ func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
 }
 
 // 利用排序特性, 比较最大最小值即可
-// 可以利用二叉搜索树来实现删除和增加,以及比较
+// TODO 可以利用二叉搜索树来实现删除和增加,以及比较
 type sortInts []int
 
 func (s *sortInts) Len() int {
@@ -93,12 +93,16 @@ func (s *sortInts) addXAndCompare(x, t int) bool {
 		return (*s)[1]-x <= t
 	}
 	for left <= right {
-		mid := (left + right) / 2
-		if (*s)[left] <= x && (*s)[right] >= x {
-			if x-(*s)[left] <= t || (*s)[right]-x <= t {
+		mid := (left + right) / 2 // mid表示小于x的最大的数
+		if (*s)[mid] <= x && (*s)[mid+1] >= x {
+			if x-(*s)[mid] <= t || (*s)[mid+1]-x <= t {
 				return true
 			} else {
-				*s = append(append((*s)[:left+1], x), (*s)[right:]...)
+				// 这一步需要copy
+				dst := make([]int, mid+1)
+				copy(dst, (*s)[:mid+1])
+				*s = append(append(dst, x), (*s)[mid+1:]...)
+				return false
 			}
 		}
 		if (*s)[mid] > x {
