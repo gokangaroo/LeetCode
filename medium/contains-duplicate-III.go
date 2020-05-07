@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	nums := []int{4, 1, 6, 3}
+	nums := []int{4, 0, 6, 2}
 	k := 100
 	t := 1
 	fmt.Println(containsNearbyAlmostDuplicate(nums, k, t))
@@ -99,9 +99,13 @@ func (s *sortInts) addXAndCompare(x, t int) bool {
 				return true
 			} else {
 				// 这一步需要copy
-				dst := make([]int, mid+1)
-				copy(dst, (*s)[:mid+1])
-				*s = append(append(dst, x), (*s)[mid+1:]...)
+				//dst := make([]int, mid+1)
+				//copy(dst, (*s)[:mid+1])
+				//*s = append(append(dst, x), (*s)[mid+1:]...)
+				// 理解切片后, 可以减少内存使用并大幅度减少拷贝耗时.
+				*s = append(*s, (*s)[s.Len()-1])
+				copy((*s)[mid+2:], (*s)[mid+1:]) //后移
+				(*s)[mid+1] = x
 				return false
 			}
 		}
