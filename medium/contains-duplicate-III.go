@@ -33,7 +33,7 @@ func max(x, y int) int {
 
 // 利用排序特性=>可以优化成二叉搜索树版本, 或者改成二叉搜索删除以及插入
 func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
-	tmp := make(sortInts, 0)
+	tmp := make(sortInts, 0, k+1)
 	for i := 0; i < len(nums); i++ { //不能是len(nums)-k, 因为可能k更大
 		if tmp.Len() == k+1 {
 			//应该删掉开头那个数
