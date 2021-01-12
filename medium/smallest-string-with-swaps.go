@@ -3,62 +3,84 @@ package main
 import (
 	"fmt"
 	"sort"
-	"strings"
 )
 
 func main() {
-	fmt.Println(smallestStringWithSwaps("dcab", [][]int{{0, 3}, {1, 2}, {0, 2}}))
+	fmt.Println(smallestStringWithSwaps("pwqlmqm",
+		[][]int{{5, 3}, {3, 0}, {5, 1}, {1, 1}, {1, 5}, {3, 0}, {0, 2}}))
 }
 
 func smallestStringWithSwaps(s string, pairs [][]int) string {
 	// s按pairs交换, pairs每个交换都可以进行多次, 换成'最小的'
 	// 等价于, 如果[a,b],a的字符>=b的字符, 就交换=>进一步理解成排序
 	// [a,b]和[b,c]可以理解成[a,b,c]的排序=>进一步可以理解成3位, 4位的排序
-	bs := strings.Split(s, "")
-	pairs = unionPairs(pairs, len(bs))
-	for _, pair := range pairs {
+	n := len(s)
+	ds := newDjset(n)
+	for _, v := range pairs {
+		ds.Merge(v[0], v[1])
+	}
+	nps := make(map[int][]int)
+	for i := 0; i < n; i++ {
+		nps[ds.Find(i)] = append(nps[ds.Find(i)], i)
+	}
+
+	bs := []byte(s)
+	for _, pair := range nps {
 		smallestStringWithSort(bs, pair)
 	}
-	return strings.Join(bs, "")
+	return string(bs)
 }
 
-func smallestStringWithSort(s []string, pair []int) {
+func smallestStringWithSort(s []byte, pair []int) {
 	sort.Ints(pair)
 
-	var tmp = make([]string, len(pair))
+	var tmp = make([]byte, len(pair))
 	for i, _ := range pair {
 		tmp[i] = s[pair[i]]
 	}
-	sort.Strings(tmp)
+	sort.Slice(tmp, func(i, j int) bool {
+		return tmp[i] < tmp[j]
+	})
 
 	for i, _ := range pair {
 		s[pair[i]] = tmp[i]
 	}
 }
 
-func unionPairs(pairs [][]int, l int) (res [][]int) {
-	// 合并有交集的所有pairs
-	// TODO 并查集, 父子节点
-	var root = make([]int, l) // idx:int->root
-	for i, _ := range pairs {
-		sort.Ints(pairs[i])
-		var r1 = pairs[i][0]
-		var r2 = pairs[i][1]
-		//for {
-		// TODO solve zero
-		root[r1] = r1
-		root[r2] = r1
-		//}
+type Djset struct {
+	Parent []int
+	Rank   []int
+}
+
+func newDjset(n int) Djset {
+	parent := make([]int, n)
+	rank := make([]int, n)
+	for i := 0; i < n; i++ {
+		parent[i] = i
+		rank[i] = 0
 	}
-	var rootSlice = make(map[int][]int, 0)
-	for i, v := range root { // int->root
-		if rootSlice[v] == nil {
-			rootSlice[v] = []int{v}
-		}
-		rootSlice[v] = append(rootSlice[v], i)
+	return Djset{parent, rank}
+}
+
+func (ds Djset) Find(x int) int {
+	if ds.Parent[x] != x {
+		ds.Parent[x] = ds.Find(ds.Parent[x])
 	}
-	for i, _ := range rootSlice {
-		res = append(res, rootSlice[i])
+	return ds.Parent[x]
+}
+
+func (ds Djset) Merge(x, y int) {
+	rx := ds.Find(x)
+	ry := ds.Find(y)
+	if rx == ry {
+		return
 	}
-	return res
+
+	if ds.Rank[rx] < ds.Rank[ry] {
+		rx, ry = ry, rx
+	}
+	ds.Parent[ry] = rx // ry < rx
+	if ds.Rank[rx] == ds.Rank[ry] {
+		ds.Rank[rx] += 1
+	}
 }
