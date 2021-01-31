@@ -15,7 +15,7 @@ func numSimilarGroups(strs []string) int {
 	   如何判断相似:
 	       除了2个字母顺序颠倒, 其他字母顺序一致
 	*/
-	// 双重循环+并查集, 主要是如何判断相似=>只有2个位置刚好不相等
+	// 双重循环+并查集, 主要是如何判断相似=>只有2个位置刚好不相等或者相等
 	var uf = make([]int, len(strs))
 	for i := 0; i < len(uf); i++ {
 		uf[i] = i
@@ -58,6 +58,9 @@ func checkSimilar(a, b string) bool {
 	for i := 0; i < len(a); i++ {
 		if a[i] != b[i] {
 			count++
+		}
+		if count > 2 {
+			return false
 		}
 	}
 	return count == 2 || count == 0
