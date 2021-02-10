@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github/gokangaroo/LeetCode/datastructure"
+	"path"
 	"strings"
 )
 
@@ -74,4 +75,38 @@ func simplifyPath2(path string) string {
 		}
 	}
 	return cursor.absolutePath
+}
+
+func simplifyPath3(path string) string {
+	arr := strings.Split(path, "/")
+	stack := make([]string, 0, len(arr))
+	for i := 1; i < len(arr); i++ {
+		switch arr[i] {
+		case ".", "":
+			continue
+		case "..":
+			// 出栈
+			if len(stack) > 0 {
+				stack = stack[:len(stack)-1]
+			}
+		default:
+			stack = append(stack, arr[i])
+		}
+	}
+	if len(stack) == 0 {
+		return "/"
+	}
+	// 使用strings.Builder减少内存消耗, 提升速度
+	var res = new(strings.Builder)
+	for i := 0; i < len(stack); i++ {
+		if stack[i] != "" {
+			res.WriteString("/" + stack[i])
+		}
+	}
+	return res.String()
+}
+
+// FIXME 标准库写法, 内存进一步降低..
+func simplifyPath4(path2 string) string {
+	return path.Clean(path2)
 }
