@@ -87,3 +87,59 @@ func checkInclusion(s1 string, s2 string) bool {
 	}
 	return false
 }
+
+func checkInclusion2(s1 string, s2 string) bool {
+	/*
+	   1. 对s1进行计数
+	   2. 滑动窗口判断是否存在
+	*/
+	if len(s2) < len(s1) {
+		return false
+	}
+
+	length := len(s1)
+	count := make([]int, 26)
+	misc := 0 // 表示还未"核平"的字母, 当misc=0时表示成功
+	for _, v := range s1 {
+		if count[v-'a'] == 0 {
+			misc++
+		}
+		count[v-'a']++
+	}
+
+	for i := 0; i < length; i++ {
+		count[s2[i]-'a']--
+		if count[s2[i]-'a'] == -1 {
+			misc++
+		}
+		if count[s2[i]-'a'] == 0 {
+			misc--
+		}
+	}
+	if misc == 0 {
+		return true
+	}
+
+	for i := length; i < len(s2); i++ {
+		// 左删 右增 i-length i
+		count[s2[i-length]-'a']++
+		if count[s2[i-length]-'a'] == 1 {
+			misc++
+		}
+		if count[s2[i-length]-'a'] == 0 {
+			misc--
+		}
+		count[s2[i]-'a']--
+		if count[s2[i]-'a'] == -1 {
+			misc++
+		}
+		if count[s2[i]-'a'] == 0 {
+			misc--
+		}
+		if misc == 0 {
+			return true
+		}
+	}
+
+	return false
+}
