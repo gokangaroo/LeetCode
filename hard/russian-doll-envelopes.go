@@ -7,58 +7,43 @@ import (
 
 func main() {
 	envelopes := [][]int{
-		[]int{5, 40},
-		[]int{6, 8},
-		[]int{6, 70},
-		[]int{7, 9},
-		[]int{2, 30},
-		[]int{9, 11},
-		[]int{13, 12},
+		{5, 40},
+		{6, 8},
+		{6, 70},
+		{7, 9},
+		{2, 30},
+		{9, 11},
+		{13, 12},
 	}
-	sort.Slice(envelopes, func(i, j int) bool {
-		return envelopes[i][0] < envelopes[j][0]
-	})
 	fmt.Println(maxEnvelopes(envelopes))
 }
 
 //动态规划思想  不过子问题的解决需要往前一次比较 双子序列
 func maxEnvelopes(envelopes [][]int) int {
-	max := 0
-	nr := len(envelopes)
-	if nr == 1 || nr == 0 {
-		return nr
-	}
 	sort.Slice(envelopes, func(i, j int) bool {
+		if envelopes[i][0] == envelopes[j][0] {
+			return envelopes[i][1] <= envelopes[j][1]
+		}
 		return envelopes[i][0] < envelopes[j][0]
 	})
 
-	arr := make([]int, nr)
-	for i := 0; i < nr-1; i++ {
-		//除了这种情况 其余全部回头查
-		if envelopes[i+1][1] > envelopes[i][1] && envelopes[i+1][0] > envelopes[i][0] && max == arr[i] {
-			arr[i+1] = arr[i] + 1
-		} else {
-			index := i
-			//回头找上一个最大值
-			k := 0
-			tmpMax := -1
-			for {
-				if index-k >= 0 {
-					if (envelopes[index-k][1] < envelopes[i+1][1]) && (envelopes[index-k][0] < envelopes[i+1][0]) {
-						if tmpMax < arr[index-k] {
-							tmpMax = arr[index-k]
-						}
-					}
-					arr[i+1] = tmpMax + 1
-				} else {
-					break
+	res := make([]int, len(envelopes))
+	max := 0
+	for i := 0; i < len(envelopes); i++ {
+		dpMax := 0
+		for j := i; j >= 0; j-- {
+			if envelopes[j][0] < envelopes[i][0] && envelopes[j][1] < envelopes[i][1] {
+				if res[j] > dpMax {
+					dpMax = res[j] // 这其实是个dp, =max(0-i)+1
 				}
-				k++
 			}
 		}
-		if max < arr[i+1] {
-			max = arr[i+1]
+
+		res[i] = dpMax + 1 // res[i]表示自己作为最外层, 最多能包多少个.
+		if res[i] > max {
+			max = res[i]
 		}
 	}
-	return max + 1
+
+	return max
 }
