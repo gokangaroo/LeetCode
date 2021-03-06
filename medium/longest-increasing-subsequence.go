@@ -4,21 +4,18 @@ import "fmt"
 
 func main() {
 	nums := []int{10, 9, 2, 5, 3, 7, 101, 18}
-	fmt.Print(lengthOfLIS3(nums))
+	fmt.Print(lengthOfLIS1(nums))
 }
 
 //经典最长子序列  二分插入
 func lengthOfLIS1(nums []int) int {
-	length := len(nums)
-	tails := make([]int, length)
-	res := 0
-	for i := 0; i < length; i++ {
+	tails := make([]int, len(nums)) // 长度为 i+1 的最长上升子序列的末尾元素的最小值
+	count := 0
+	for i := 0; i < len(nums); i++ {
 		left := 0
-		right := res
-		for {
-			if left >= right {
-				break
-			}
+		right := count // tails有值的长度
+		//二分查找比nums[i]大的, 可以进行替换
+		for left < right {
 			mid := (left + right) / 2
 			if tails[mid] < nums[i] {
 				left = mid + 1
@@ -26,43 +23,38 @@ func lengthOfLIS1(nums []int) int {
 				right = mid
 			}
 		}
-		//替换中间值
+		//替换可替换的值
 		tails[left] = nums[i]
-		//最右边插入
-		if res == right {
-			res++
+		//最右边插入left==right, 长度+1
+		if count == right {
+			count++
 		}
 	}
-	return res
+	return count
 }
 
 //动态规划
 func lengthOfLIS(nums []int) int {
-	length := len(nums)
-	if length == 0 {
-		return 0
-	}
-	dp := make([]int, length)
-	dp[0] = 1
-	maxVal := 1
-	for i := 1; i < length; i++ {
-		tmp := 0
-		for j := 0; j < i; j++ {
-			if nums[i] > nums[j] {
-				tmp = max(tmp, dp[j])
+	res := make([]int, len(nums))
+	max := 0
+
+	for i := 0; i < len(nums); i++ {
+		dpMax := 0
+		for j := i; j >= 0; j-- {
+			if nums[j] < nums[i] {
+				if res[j] > dpMax {
+					dpMax = res[j]
+				}
 			}
 		}
-		dp[i] = tmp + 1
-		maxVal = max(dp[i], maxVal)
-	}
-	return maxVal
-}
 
-func max(x, y int) int {
-	if x > y {
-		return x
+		res[i] = dpMax + 1
+		if res[i] > max {
+			max = res[i]
+		}
 	}
-	return y
+
+	return max
 }
 
 func lengthOfLIS2(nums []int) int {
