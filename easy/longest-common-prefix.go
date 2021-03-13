@@ -68,3 +68,32 @@ func additional(len int, length int, strs []string, result *string) {
 		*result += string(strs[0][j])
 	}
 }
+
+func longestCommonPrefix3(strs []string) string {
+	/*
+	   直接拿着0往后找, 不停砍尾巴, 横向扫描
+	*/
+	if len(strs) == 0 {
+		return ""
+	}
+	prefix := strs[0]
+	for i := 1; i < len(strs); i++ {
+		if prefix == "" {
+			return prefix
+		}
+		if len(prefix) > len(strs[i]) {
+			prefix = prefix[:len(strs[i])]
+		}
+		if prefix == strs[i][:len(prefix)] {
+			continue
+		}
+		// 切尾巴
+		for j := 0; j < len(prefix); j++ {
+			if prefix[j] != strs[i][j] {
+				prefix = prefix[:j]
+				break
+			}
+		}
+	}
+	return prefix
+}
